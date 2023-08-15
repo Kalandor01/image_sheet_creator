@@ -10,20 +10,18 @@ def make_img_sheet(image_name="img.png", target_image_name="target_image.png" , 
     Tiles an image x * y times.
     """
     
-    # image.show()
-    
     if aspect_ratio <= 0:
-        print(f"Aspect ratio is not large enough: ({aspect_ratio[0]} <= 0")
+        input(f"Aspect ratio is not large enough: ({aspect_ratio[0]} <= 0")
         return
     
     if tile_amount[0] < 1 or tile_amount[1] < 1:
-        input(f"Sor vagy oslopszám túl kicsi: ({tile_amount[0]}, {tile_amount[1]}) < (1, 1)")
+        input(f"Tile amount is too small: ({tile_amount[0]}, {tile_amount[1]}) < (1, 1)")
         return
     
     try:
         image = Image.open(image_name)
     except FileNotFoundError:
-        print(f"\"{image_name}\" not found!")
+        input(f"\"{image_name}\" not found!")
         return
     
     # calculate sizes    
@@ -62,16 +60,20 @@ if __name__ == "__main__":
     tile_amount:tuple[int, int] = (3, 10)
     aspect_ratio:float = a4_aspect_ratio
     
-    # args = argv
-    # if len(args) < 2:
-    #     input("Egy képet társits ehez az alkalmazáshoz.")
-    #     exit()
-    # else:
-    #     image_name = args[1]
-    tile_amount_x = int(input("Hány kép legyen egy sorban: "))
-    tile_amount_y = int(input("Hány kép legyen egy oszlopban: "))
+    args = argv
+    if len(args) < 2:
+        input("Open an image with this app.")
+        exit()
+    
+    image_name = args[1]
+    tile_amount_x = int(input("How many images in a row: "))
+    tile_amount_y = int(input("How many images in a column: "))
     tile_amount = (tile_amount_x, tile_amount_y)
-    is_landscape = input("Elfektetve (I/N): ").upper() == "I"
+    try:
+        aspect_ratio = float(input("Aspect ratio (A4 by default): "))
+    except ValueError:
+        pass
+    is_landscape = input("Flip aspect ratio (Y/N): ").upper() == "Y"
     
     if is_landscape:
         aspect_ratio = 1 / aspect_ratio
